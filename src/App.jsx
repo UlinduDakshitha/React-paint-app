@@ -1,35 +1,99 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+ import React, { useRef, useState } from "react";
+import { Box, Button, Slider, Typography } from "@mui/material";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const canvasRef = useRef(null);
+  const ctxRef = useRef(null);
+
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [color, setColor] = useState("#000000");
+  const [brushSize, setBrushSize] = useState(5);
+
+  const startDrawing = (e) => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = brushSize;
+    ctx.lineCap = "round";
+
+    ctx.beginPath();
+    ctx.moveTo(
+      e.nativeEvent.offsetX,
+      e.nativeEvent.offsetY
+    );
+
+    ctxRef.current = ctx;
+    setIsDrawing(true);
+  };
+
+  const draw = (e) => {
+    if (!isDrawing) return;
+
+    ctxRef.current.lineTo(
+      e.nativeEvent.offsetX,
+      e.nativeEvent.offsetY
+    );
+    ctxRef.current.stroke();
+  };
+
+  const stopDrawing = () => {
+    ctxRef.current.closePath();
+    setIsDrawing(false);
+  };
+
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" textAlign="center" mb={2}>
+         React Paint App
+      </Typography>
+
+      {/* Tools */}
+      <Box display="flex" gap={2} mb={2} alignItems="center">
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+        />
+
+        <Typography>Brush Size</Typography>
+        <Slider
+          min={1}
+          max={20}
+          value={brushSize}
+          onChange={(e, val) => setBrushSize(val)}
+          sx={{ width: 150 }}
+        />
+
+        <Button variant="contained" color="error" onClick={clearCanvas}>
+          Clear
+        </Button>
+      </Box>
+
+      {/* Canvas */}
+      <canvas
+        ref={canvasRef}
+        width={800}
+        height={400}
+        style={{
+          border: "2px solid #000",
+          borderRadius: "8px",
+          cursor: "crosshair"
+        }}
+        onMouseDown={startDrawing}
+        onMouseMove={draw}
+        onMouseUp={stopDrawing}
+        onMouseLeave={stopDrawing}
+      />
+    </Box>
+  );
 }
 
-export default App
+export default App;
+
