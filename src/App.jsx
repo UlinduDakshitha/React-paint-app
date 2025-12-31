@@ -8,6 +8,7 @@ function App() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [color, setColor] = useState("#000000");
   const [brushSize, setBrushSize] = useState(5);
+  const [opacity, setOpacity] = useState(1);
 
   const startDrawing = (e) => {
     const canvas = canvasRef.current;
@@ -16,6 +17,7 @@ function App() {
     ctx.strokeStyle = color;
     ctx.lineWidth = brushSize;
     ctx.lineCap = "round";
+    ctx.globalAlpha = opacity;
 
     ctx.beginPath();
     ctx.moveTo(
@@ -68,6 +70,16 @@ function App() {
           max={20}
           value={brushSize}
           onChange={(e, val) => setBrushSize(val)}
+          sx={{ width: 150 }}
+        />
+
+        <Typography>Opacity</Typography>
+        <Slider
+          min={0}
+          max={1}
+          step={0.1}
+          value={opacity}
+          onChange={(e, val) => setOpacity(val)}
           sx={{ width: 150 }}
         />
 
