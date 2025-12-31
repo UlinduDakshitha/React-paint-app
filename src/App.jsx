@@ -56,7 +56,8 @@ function App() {
          React Paint App
       </Typography>
 
-      {/* Tools */}
+      
+      <Typography>Color</Typography>
       <Box display="flex" gap={2} mb={2} alignItems="center">
         <input
           type="color"
@@ -87,8 +88,7 @@ function App() {
           Clear
         </Button>
       </Box>
-
-      {/* Canvas */}
+ 
       <canvas
         ref={canvasRef}
         width={800}
