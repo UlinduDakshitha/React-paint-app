@@ -51,14 +51,13 @@ function App() {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 3 }} textAlign="center">
       <Typography variant="h4" textAlign="center" mb={2}>
          React Paint App
       </Typography>
 
-      
-      <Typography>Color</Typography>
-      <Box display="flex" gap={2} mb={2} alignItems="center">
+      <Box display="flex" gap={2} mb={2} alignItems="center" justifyContent="center">
+        <Typography>Color</Typography>
         <input
           type="color"
           value={color}
